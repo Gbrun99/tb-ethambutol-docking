@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://3dmol.org/build/3Dmol-min.js"></script>
+</head>
+<body style="margin: 0; padding: 0; background-color: #111;">
+    <div id="viewport" style="width: 100vw; height: 100vh;"></div>
+    <script>
+        let viewer = $3Dmol.createViewer("viewport", {backgroundColor: "black"});
+        fetch("EmbC_clean.pdb")
+            .then(res => res.text())
+            .then(pdbData => {
+                viewer.addModel(pdbData, "pdb");
+                viewer.setStyle({}, {cartoon: {color: "spectrum"}});
+                fetch("EmbC_Ethambutol_docked.pdbqt")
+                    .then(res => res.text())
+                    .then(pdbqtData => {
+                        viewer.addModel(pdbqtData, "pdbqt");
+                        viewer.setStyle({model: 1}, {stick: {colorscheme: "greenCarbon"}});
+                        viewer.zoomTo();
+                        viewer.render();
+                    });
+            });
+    </script>
+</body>
+</html>

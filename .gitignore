@@ -1,0 +1,4 @@
+*.pdb
+*.sdf
+*.pdbqt
+EmbC_temp.pdbqt
