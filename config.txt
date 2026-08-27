@@ -1,0 +1,11 @@
+receptor = results/structures/KatG_S315T.pdbqt
+ligand = data/structures/isoniazid.pdbqt
+out = results/structures/docking_output.pdbqt
+scoring = vina
+center_x = -3.5
+center_y = 31.2
+center_z = -14.8
+size_x = 22.0
+size_y = 22.0
+size_z = 22.0
+exhaustiveness = 8
