@@ -1,4 +1,2 @@
-*.pdb
-*.sdf
-*.pdbqt
-EmbC_temp.pdbqt
+*.pyc
+.DS_Store
