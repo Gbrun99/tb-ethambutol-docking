@@ -1,26 +1,115 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <script src="https://3dmol.org/build/3Dmol-min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis de Resistencia de EmbC (M. tuberculosis)</title>
+    <script src="https://3dmol.csb.pitt.edu/build/3Dmol-min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 { margin-bottom: 10px; color: #1a252f; }
+        p.desc { max-width: 800px; margin: 0 auto 30px auto; color: #555; }
+        .viewer-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .viewer-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            width: 45%;
+            min-width: 320px;
+            box-sizing: border-box;
+        }
+        .mol-container {
+            width: 100%;
+            height: 420px;
+            position: relative;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+        .metric {
+            font-size: 1.1em;
+            margin-top: 15px;
+            padding: 8px;
+            background-color: #eef2f5;
+            border-radius: 6px;
+        }
+        .plot-card {
+            background: white;
+            padding: 20px;
+            max-width: 700px;
+            margin: 0 auto 40px auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .plot-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+    </style>
 </head>
-<body style="margin: 0; padding: 0; background-color: #111;">
-    <div id="viewport" style="width: 100vw; height: 100vh;"></div>
+<body>
+
+    <h1>Análisis de Resistencia: Mutación M306V en EmbC</h1>
+    <p class="desc">
+        Visualización interactiva 3D comparando la estructura de la arabinosiltransferasa EmbC de <i>M. tuberculosis</i> en su estado Silvestre (Wild-Type) frente a la mutante de resistencia M306V.
+    </p>
+
+    <div class="viewer-container">
+        <!-- Visualizador Wild-Type -->
+        <div class="viewer-card">
+            <h3>EmbC Wild-Type (Sensible)</h3>
+            <div id="container-wt" class="mol-container"></div>
+            <div class="metric">
+                <strong>Energía Libre (ΔG):</strong> -5.147 kcal/mol
+            </div>
+        </div>
+
+        <!-- Visualizador Mutante -->
+        <div class="viewer-card">
+            <h3>EmbC Mutante M306V (Resistente)</h3>
+            <div id="container-mut" class="mol-container"></div>
+            <div class="metric">
+                <strong>Energía Libre (ΔG):</strong> -3.820 kcal/mol
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráfica Comparativa -->
+    <div class="plot-card">
+        <h3>Comparativa de Energía Libre de Gibbs</h3>
+        <img src="comparativa_resistencia.png" alt="Gráfica comparativa de afino de resistencia">
+    </div>
+
     <script>
-        let viewer = $3Dmol.createViewer("viewport", {backgroundColor: "black"});
-        fetch("EmbC_clean.pdb")
-            .then(res => res.text())
-            .then(pdbData => {
-                viewer.addModel(pdbData, "pdb");
-                viewer.setStyle({}, {cartoon: {color: "spectrum"}});
-                fetch("EmbC_Ethambutol_docked.pdbqt")
-                    .then(res => res.text())
-                    .then(pdbqtData => {
-                        viewer.addModel(pdbqtData, "pdbqt");
-                        viewer.setStyle({model: 1}, {stick: {colorscheme: "greenCarbon"}});
-                        viewer.zoomTo();
-                        viewer.render();
-                    });
-            });
+        // Cargar modelo Wild-Type
+        let viewerWT = $3Dmol.createViewer("container-wt", {backgroundColor: "white"});
+        viewerWT.addModelFromFile("receptor.pdb", "pdb");
+        viewerWT.setStyle({cartoon: {color: "spectrum"}});
+        viewerWT.addStyle({resn:'MET',resi:306},{stick:{colorscheme:'orangeCarbon'}});
+        viewerWT.zoomTo();
+        viewerWT.render();
+
+        // Cargar modelo Mutante M306V
+        let viewerMut = $3Dmol.createViewer("container-mut", {backgroundColor: "white"});
+        viewerMut.addModelFromFile("receptor_M306V.pdb", "pdb");
+        viewerMut.setStyle({cartoon: {color: "spectrum"}});
+        viewerMut.addStyle({resn:'VAL',resi:306},{stick:{colorscheme:'orangeCarbon'}});
+        viewerMut.zoomTo();
+        viewerMut.render();
     </script>
 </body>
 </html>
