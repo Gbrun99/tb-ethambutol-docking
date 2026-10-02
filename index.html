@@ -4,9 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>M. tuberculosis EmbC - Visualizador 3D Docking (WT vs M306V)</title>
-  <!-- jQuery necesario para la carga AJAX de PDBs en 3Dmol.js -->
+
+  <!-- Carga de jQuery y 3Dmol.js -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://3dmol.org/build/3Dmol-min.js"></script>
+
   <style>
     body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f6f9; }
     h1 { color: #2c3e50; text-align: center; }
@@ -22,7 +24,7 @@
 <body>
 
   <h1>Análisis Estructural de Docking: Ethambutol en EmbC</h1>
-  <p>Comparativa 3D de afinidad de unión: Cepa Silvestre (WT) vs. Mutante de Resistencia (M306V)</p>
+  <p>Comparativa 3D: Cepa Silvestre (WT - Met306) vs. Mutante de Resistencia (M306V - Val306)</p>
 
   <div class="container">
     <!-- Contenedor WT -->
@@ -42,26 +44,28 @@
 
   <script>
     $(document).ready(function() {
-      // 1. Cargar Estructura WT
+      // 1. Cargar Cepa Silvestre (WT)
       let elementWT = $('#viewer_wt');
-      let configWT = { backgroundColor: 'white' };
-      let viewerWT = $3Dmol.createViewer(elementWT, configWT);
+      let viewerWT = $3Dmol.createViewer(elementWT, { backgroundColor: 'white' });
       
       $.get('EmbC_WT.pdb', function(data) {
         viewerWT.addModel(data, "pdb");
         viewerWT.setStyle({}, {cartoon: {color: 'spectrum'}});
+        viewerWT.addStyle({resi: '306'}, {stick: {color: 'red', radius: 0.35}});
+        viewerWT.addLabel("Met306", {position: {resi: '306'}, backgroundColor: 'black', backgroundOpacity: 0.8, fontColor: 'white'});
         viewerWT.zoomTo();
         viewerWT.render();
       });
 
-      // 2. Cargar Estructura M306V
+      // 2. Cargar Mutante M306V
       let elementMut = $('#viewer_mut');
-      let configMut = { backgroundColor: 'white' };
-      let viewerMut = $3Dmol.createViewer(elementMut, configMut);
+      let viewerMut = $3Dmol.createViewer(elementMut, { backgroundColor: 'white' });
 
       $.get('receptor_M306V.pdb', function(data) {
         viewerMut.addModel(data, "pdb");
-        viewerMut.setStyle({}, {cartoon: {color: 'red'}});
+        viewerMut.setStyle({}, {cartoon: {color: 'spectrum'}});
+        viewerMut.addStyle({resi: '306'}, {stick: {color: 'red', radius: 0.35}});
+        viewerMut.addLabel("Val306", {position: {resi: '306'}, backgroundColor: 'darkred', backgroundOpacity: 0.8, fontColor: 'white'});
         viewerMut.zoomTo();
         viewerMut.render();
       });
